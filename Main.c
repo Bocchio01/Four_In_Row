@@ -11,14 +11,14 @@ void print_board(int board_game[ROWS][COLUMNS])
 {
 	for (int r = ROWS - 1; r >= 0; r--)
 	{
-		printf("\n");
 		for (int c = 0; c < COLUMNS; c++)
 		{
 			printf(" %c ", board_game[r][c]);
 		}
+		printf("\n");
 	}
-	printf("\n -------------------");
-	printf("\n 1  2  3  4  5  6  7");
+	printf(" -------------------");
+	printf("\n 1  2  3  4  5  6  7\n");
 }
 
 bool is_insert_valid(int board_game[ROWS][COLUMNS], int selected_column)
@@ -35,7 +35,6 @@ bool is_insert_valid(int board_game[ROWS][COLUMNS], int selected_column)
 		return false;
 	}
 
-	printf("\nColonna selezionata valida");
 	return true;
 }
 
@@ -75,6 +74,31 @@ bool check_winner(int board_game[ROWS][COLUMNS], int position_array[2])
 	return false;
 }
 
+bool check_parity(int board_game[ROWS][COLUMNS])
+{
+	for (int c = 0; c < COLUMNS; c++)
+		if (board_game[ROWS - 1][c] == 46)
+			return false;
+
+	return true;
+}
+
+void delay(int milliseconds)
+{
+	time_t start_time = time(NULL);
+	while ((time(NULL) - start_time) * 1000 < milliseconds)
+		;
+}
+
+void clear_input_buffer()
+{
+	int c;
+	do
+	{
+		c = getchar();
+	} while (c != '\n' && c != EOF);
+}
+
 int main()
 {
 
@@ -103,52 +127,63 @@ int main()
 
 	// Inizio programma
 
-	printf("Ecco un programma per giocare al gioco: 'Forza 4' ");
-	printf("\nQuesta e' la tabella dove vi sfiderete te e il tuo avversaio\n");
-	print_board(board_game);
+	printf("Ecco un programma per giocare al gioco: 'Forza 4'\n\n\n");
 
 	for (int i = 0; i < PLAYER_NUMBER; i++)
 	{
-		printf("\nInserisci il nome del giocatore %d: ", i + 1);
+		printf("Inserisci il nome del giocatore %d: ", i + 1);
 		scanf("%s", players[i].name);
-		printf("Il giocatore %s utilizzera': %c", players[i].name, players[i].symbol);
+		printf("Il giocatore %s utilizzera': %c\n\n", players[i].name, players[i].symbol);
 	}
 
-	printf("\nEd ora incominciamo a giocare");
-	printf("\nScegliamo chi inizia: tiriamo un dado...");
+	printf("\nPer scegliere chi inizia tiriamo un dado");
+	for (int i = 0; i < 5; i++)
+	{
+		delay(500);
+		printf(".");
+	}
 
 	srand(time(NULL));
 	player_index = rand() % 2;
-	printf("\nInizia %s", players[player_index].name);
+	printf("\nInizia %s! (premi un tasto per continuare)", players[player_index].name);
 
+	clear_input_buffer();
+	getchar();
 	// Inizio gioco
 
 	do
 	{
 		int selected_column = -1;
 		int inserted_row;
-		printf("\nE' il  tuo turno %s (%c)", players[player_index].name, players[player_index].symbol);
+
+		system("cls");
+		print_board(board_game);
 		do
 		{
-			printf("\nSeleziona una colonna da 1 a 7:");
+			printf("\n%s (%c) seleziona una colonna da 1 a 7: ", players[player_index].name, players[player_index].symbol);
 			scanf("%d", &selected_column);
 			selected_column--;
 
 		} while (is_insert_valid(board_game, selected_column) == false);
 
 		inserted_row = insert_symbol(&board_game, players[player_index].symbol, selected_column);
-		print_board(board_game);
 
 		int position_array[2] = {inserted_row, selected_column};
 		if (check_winner(board_game, position_array))
 		{
+			system("cls");
+			print_board(board_game);
 			printf("\nComplimenti %s, hai vinto", players[player_index].name);
 			break;
 		}
-		else
+
+		if (check_parity(board_game))
 		{
-			player_index = (player_index + 1) % 2;
+			printf("\nOhoh, sembra che il gioco sia finito in pareggio...");
+			break;
 		}
+
+		player_index = (player_index + 1) % 2;
 
 	} while (true);
 
