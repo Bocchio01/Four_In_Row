@@ -1,3 +1,19 @@
+/*
+ * A simple 'Four in a Row' game implementation.
+ *
+ * Author: Tommaso Bocchietti
+ * Email: tommaso.bocchietti@gmail.com
+ * Date: 2023-03-29
+ *
+ * This program let two players play the game of 'Four in a Row' on the same computer.
+ * The game is played on a 6x7 board, and the first player to get four of his/her symbols in a row (horizontally, vertically or diagonally) wins.
+ * The players take turns inserting their symbols into the board, and the game ends when one of the players wins, or when the board is full.
+ * No graphics are provided, this is just a console application.
+ *
+ * License: MIT
+ *
+ */
+
 #include "utils.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,7 +24,7 @@
 #define COLUMNS 7
 #define PLAYER_NUMBER 2
 
-void print_board(int board_game[ROWS][COLUMNS])
+void draw_board(int board[ROWS][COLUMNS])
 {
 	system("cls");
 
@@ -16,7 +32,7 @@ void print_board(int board_game[ROWS][COLUMNS])
 	{
 		for (int c = 0; c < COLUMNS; c++)
 		{
-			printf(" %c ", board_game[r][c]);
+			printf(" %c ", board[r][c]);
 		}
 		printf("\n");
 	}
@@ -24,41 +40,41 @@ void print_board(int board_game[ROWS][COLUMNS])
 	printf("\n 1  2  3  4  5  6  7\n");
 }
 
-bool is_insert_valid(int board_game[ROWS][COLUMNS], int selected_column)
+bool is_insert_valid(int board[ROWS][COLUMNS], int selected_column)
 {
 	if ((selected_column < 0) || (selected_column > COLUMNS - 1))
 	{
-		printf("\nNumero colonna non valido");
+		printf("\nColumn's index out of range");
 		return false;
 	}
 
-	if (board_game[ROWS - 1][selected_column] != 46)
+	if (board[ROWS - 1][selected_column] != 46)
 	{
-		printf("\nLa colonna selezionata e' gia' piena");
+		printf("\nThe selected column is full");
 		return false;
 	}
 
 	return true;
 }
 
-int insert_symbol(int (*board_game)[ROWS][COLUMNS], int symbol, int selected_column)
+int insert_into_board(int (*board)[ROWS][COLUMNS], int symbol, int selected_column)
 {
 
-	if (!is_insert_valid(*board_game, selected_column))
+	if (!is_insert_valid(*board, selected_column))
 		return -1;
 
 	int r = 0;
-	while ((*board_game)[r][selected_column] != 46)
+	while ((*board)[r][selected_column] != 46)
 		r++;
-	(*board_game)[r][selected_column] = symbol;
+	(*board)[r][selected_column] = symbol;
 
 	return r;
 }
 
-bool check_winner(int board_game[ROWS][COLUMNS], int position_array[2])
+bool check_winner(int board[ROWS][COLUMNS], int position_array[2])
 {
 
-	int symbol = board_game[position_array[0]][position_array[1]];
+	int symbol = board[position_array[0]][position_array[1]];
 
 	for (int i = 0; i < 9; i++)
 	{
@@ -67,7 +83,7 @@ bool check_winner(int board_game[ROWS][COLUMNS], int position_array[2])
 			int count = 0;
 			int r = position_array[0];
 			int c = position_array[1];
-			while ((r >= 0) && (r < ROWS) && (c >= 0) && (c < COLUMNS) && (board_game[r][c] == symbol))
+			while ((r >= 0) && (r < ROWS) && (c >= 0) && (c < COLUMNS) && (board[r][c] == symbol))
 			{
 				count++;
 				r += i / 3 - 1;
@@ -81,10 +97,10 @@ bool check_winner(int board_game[ROWS][COLUMNS], int position_array[2])
 	return false;
 }
 
-bool check_parity(int board_game[ROWS][COLUMNS])
+bool check_tie(int board[ROWS][COLUMNS])
 {
 	for (int c = 0; c < COLUMNS; c++)
-		if (board_game[ROWS - 1][c] == 46)
+		if (board[ROWS - 1][c] == 46)
 			return false;
 
 	return true;
@@ -94,7 +110,7 @@ int main()
 {
 
 	// Dichiarazione variabili
-	int board_game[ROWS][COLUMNS], player_index;
+	int board[ROWS][COLUMNS], player_index;
 
 	struct players
 	{
@@ -110,22 +126,27 @@ int main()
 
 	for (int r = 0; r < ROWS; r++)
 		for (int c = 0; c < COLUMNS; c++)
-			board_game[r][c] = 46;
+			board[r][c] = 46;
 
 	players[0].symbol = CROSS;
 	players[1].symbol = CIRCLE;
 
-	// Inizio programma
-	printf("Ecco un programma per giocare al gioco: 'Forza 4'\n\n\n");
+	// Program begin
+	printf("Welcome to the 'Four in a Row' game!\n");
+	printf("This program was developed by Tommaso Bocchietti back in 2017 at high school and updated in 2023.\n");
+
+	print_horizontal_line(50, '-');
 
 	for (int i = 0; i < PLAYER_NUMBER; i++)
 	{
-		printf("Inserisci il nome del giocatore %d: ", i + 1);
+		printf("\nEnter the name of player %d: ", i + 1);
 		scanf("%s", players[i].name);
-		printf("Il giocatore %s utilizzera': %c\n\n", players[i].name, players[i].symbol);
+		printf("Player %s is going to use: %c\n", players[i].name, players[i].symbol);
 	}
 
-	printf("\nPer scegliere chi inizia tiriamo un dado");
+	print_horizontal_line(50, '-');
+
+	printf("\nTo choose who starts, let's roll a dice");
 	for (int i = 0; i < 5; i++)
 	{
 		delay(200);
@@ -134,7 +155,7 @@ int main()
 
 	srand(time(NULL));
 	player_index = rand() % 2;
-	printf("\nInizia %s! (premi un tasto per continuare)", players[player_index].name);
+	printf("\n%s starts! (press any key to continue)", players[player_index].name);
 
 	clear_input_buffer();
 	getchar();
@@ -143,35 +164,35 @@ int main()
 	do
 	{
 
-		print_board(board_game);
+		draw_board(board);
 		int selected_column = -1;
 		int inserted_row = -1;
 
 		do
 		{
-			printf("\n%s (%c) seleziona una colonna da 1 a 7: ", players[player_index].name, players[player_index].symbol);
+			printf("\n%s (%c) selects any column from 1 to 7: ", players[player_index].name, players[player_index].symbol);
 			while (scanf("%d", &selected_column) != 1)
 			{
-				printf("Puoi inserire solo valori numerici: ");
+				printf("You can enter only integer values: ");
 				scanf("%*s");
 			}
 			selected_column--; // Because of the array index from 0 to 6
 
-			inserted_row = insert_symbol(&board_game, players[player_index].symbol, selected_column);
+			inserted_row = insert_into_board(&board, players[player_index].symbol, selected_column);
 		} while (inserted_row == -1);
 
 		int position_array[2] = {inserted_row, selected_column};
-		if (check_winner(board_game, position_array))
+		if (check_winner(board, position_array))
 		{
-			print_board(board_game);
-			printf("\nComplimenti %s, hai vinto", players[player_index].name);
+			draw_board(board);
+			printf("\nCongratulations %s, you won! :)", players[player_index].name);
 			break;
 		}
 
-		if (check_parity(board_game))
+		if (check_tie(board))
 		{
-			print_board(board_game);
-			printf("\nOhoh, sembra che il gioco sia finito in pareggio...");
+			draw_board(board);
+			printf("\nOhoh, looks like the game ended in draw...");
 			break;
 		}
 
