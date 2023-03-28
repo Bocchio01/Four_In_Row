@@ -113,8 +113,8 @@ bool check_tie(int board[ROWS][COLUMNS])
 int main(int argc, char *argv[])
 {
 
-	// Dichiarazione variabili
-	bool debug_mode = argc > 1;
+	// Variables declaration
+	bool debug = argc > 1;
 
 	int board[ROWS][COLUMNS], player_index;
 
@@ -138,7 +138,7 @@ int main(int argc, char *argv[])
 	players[1].symbol = CIRCLE;
 
 	// Program begin
-	if (!debug_mode)
+	if (!debug)
 	{
 		printf("Welcome to the 'Four in a Row' game!\n");
 		printf("This program was developed by Tommaso Bocchietti back in 2017 at high school and updated in 2023.\n");
@@ -175,7 +175,7 @@ int main(int argc, char *argv[])
 		player_index = 0;
 	}
 
-	// Inizio gioco
+	// Game loop
 	do
 	{
 
