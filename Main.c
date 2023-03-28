@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdbool.h>
+#include <string.h>
 
 #define ROWS 6
 #define COLUMNS 7
@@ -76,22 +77,25 @@ bool check_winner(int board[ROWS][COLUMNS], int position_array[2])
 
 	int symbol = board[position_array[0]][position_array[1]];
 
-	for (int i = 0; i < 9; i++)
+	for (int i = 0; i <= 3; i++)
 	{
-		if (i != 4)
+		int count = 0;
+
+		for (int dir = -1; dir <= 1; dir += 2)
 		{
-			int count = 0;
 			int r = position_array[0];
 			int c = position_array[1];
+
 			while ((r >= 0) && (r < ROWS) && (c >= 0) && (c < COLUMNS) && (board[r][c] == symbol))
 			{
 				count++;
-				r += i / 3 - 1;
-				c += i % 3 - 1;
+				r += dir * (i / 3 - 1);
+				c += dir * (i % 3 - 1);
 			}
-			if (count >= 4)
-				return true;
 		}
+
+		if (--count >= 4) // Because the central symbol is counted twice
+			return true;
 	}
 
 	return false;
@@ -106,10 +110,12 @@ bool check_tie(int board[ROWS][COLUMNS])
 	return true;
 }
 
-int main()
+int main(int argc, char *argv[])
 {
 
 	// Dichiarazione variabili
+	bool debug_mode = argc > 1;
+
 	int board[ROWS][COLUMNS], player_index;
 
 	struct players
@@ -132,33 +138,42 @@ int main()
 	players[1].symbol = CIRCLE;
 
 	// Program begin
-	printf("Welcome to the 'Four in a Row' game!\n");
-	printf("This program was developed by Tommaso Bocchietti back in 2017 at high school and updated in 2023.\n");
-
-	print_horizontal_line(50, '-');
-
-	for (int i = 0; i < PLAYER_NUMBER; i++)
+	if (!debug_mode)
 	{
-		printf("\nEnter the name of player %d: ", i + 1);
-		scanf("%s", players[i].name);
-		printf("Player %s is going to use: %c\n", players[i].name, players[i].symbol);
+		printf("Welcome to the 'Four in a Row' game!\n");
+		printf("This program was developed by Tommaso Bocchietti back in 2017 at high school and updated in 2023.\n");
+
+		print_horizontal_line(50, '-');
+
+		for (int i = 0; i < PLAYER_NUMBER; i++)
+		{
+			printf("\nEnter the name of player %d: ", i + 1);
+			scanf("%s", players[i].name);
+			printf("Player %s is going to use: %c\n", players[i].name, players[i].symbol);
+		}
+
+		print_horizontal_line(50, '-');
+
+		printf("\nTo choose who starts, let's roll a dice");
+		for (int i = 0; i < 5; i++)
+		{
+			delay(200);
+			printf(".");
+		}
+
+		srand(time(NULL));
+		player_index = rand() % 2;
+		printf("\n%s starts! (press any key to continue)", players[player_index].name);
+
+		clear_input_buffer();
+		getchar();
 	}
-
-	print_horizontal_line(50, '-');
-
-	printf("\nTo choose who starts, let's roll a dice");
-	for (int i = 0; i < 5; i++)
+	else
 	{
-		delay(200);
-		printf(".");
+		strcpy(players[0].name, "Player 1");
+		strcpy(players[1].name, "Player 2");
+		player_index = 0;
 	}
-
-	srand(time(NULL));
-	player_index = rand() % 2;
-	printf("\n%s starts! (press any key to continue)", players[player_index].name);
-
-	clear_input_buffer();
-	getchar();
 
 	// Inizio gioco
 	do
@@ -201,6 +216,6 @@ int main()
 	} while (true);
 
 	printf("\n\n");
-	// system("PAUSE");
+	system("PAUSE");
 	return 0;
 }

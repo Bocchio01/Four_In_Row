@@ -2,7 +2,8 @@
 
 This is a **simple implementation of the Four In a Row game, developed during high school using basic concepts of C**.
 
-![Play board screenshot](Img/Screenshot%202023-03-26%20131115.png)
+![Initial board screenshot](Img/Initial_Screen.png)
+![Winning board screenshot](Img/Winning_Screen.png)
 
 ## How to play
 
@@ -34,7 +35,15 @@ To run the game, simply run the following command:
 
 ## Improvements / pull requests
 
-Since I haven't touched this code in a long time (from about 2017), **I would love to see improvements**, so feel free to fork this repository and make pull requests.
+Some things that could be improved are:
+- [ ] Graphics;
+- [ ] Menu to restart/quit the game;
+- [ ] Online multiplayer support (at least LAN);
+- [ ] Any other improvement you can think of.
+
+Since this repo is still at a very basic level of implementation and complexity, **I would love to see improvements!**
+Feel free to fork this repository, make pull requests or do whatever you want with it.
+
 
 Have a nice coding day,
 
