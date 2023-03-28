@@ -20,15 +20,15 @@ To compile the game, you need to have the GCC compiler installed on your machine
 
 To compile the game, simply run the following command:
 
-```bash
-gcc -o Main Main.c
+```shell
+gcc utils.c Main.c -o Four_In_Row.exe -std=c99
 ```
 
 ## How to run
 
 To run the game, simply run the following command:
 
-```bash
+```shell
 ./Main
 ```
 

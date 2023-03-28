@@ -1,3 +1,4 @@
+#include "utils.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -9,6 +10,8 @@
 
 void print_board(int board_game[ROWS][COLUMNS])
 {
+	system("cls");
+
 	for (int r = ROWS - 1; r >= 0; r--)
 	{
 		for (int c = 0; c < COLUMNS; c++)
@@ -40,6 +43,10 @@ bool is_insert_valid(int board_game[ROWS][COLUMNS], int selected_column)
 
 int insert_symbol(int (*board_game)[ROWS][COLUMNS], int symbol, int selected_column)
 {
+
+	if (!is_insert_valid(*board_game, selected_column))
+		return -1;
+
 	int r = 0;
 	while ((*board_game)[r][selected_column] != 46)
 		r++;
@@ -83,27 +90,10 @@ bool check_parity(int board_game[ROWS][COLUMNS])
 	return true;
 }
 
-void delay(int milliseconds)
-{
-	time_t start_time = time(NULL);
-	while ((time(NULL) - start_time) * 1000 < milliseconds)
-		;
-}
-
-void clear_input_buffer()
-{
-	int c;
-	do
-	{
-		c = getchar();
-	} while (c != '\n' && c != EOF);
-}
-
 int main()
 {
 
 	// Dichiarazione variabili
-
 	int board_game[ROWS][COLUMNS], player_index;
 
 	struct players
@@ -126,7 +116,6 @@ int main()
 	players[1].symbol = CIRCLE;
 
 	// Inizio programma
-
 	printf("Ecco un programma per giocare al gioco: 'Forza 4'\n\n\n");
 
 	for (int i = 0; i < PLAYER_NUMBER; i++)
@@ -139,7 +128,7 @@ int main()
 	printf("\nPer scegliere chi inizia tiriamo un dado");
 	for (int i = 0; i < 5; i++)
 	{
-		delay(500);
+		delay(200);
 		printf(".");
 	}
 
@@ -149,29 +138,31 @@ int main()
 
 	clear_input_buffer();
 	getchar();
-	// Inizio gioco
 
+	// Inizio gioco
 	do
 	{
-		int selected_column = -1;
-		int inserted_row;
 
-		system("cls");
 		print_board(board_game);
+		int selected_column = -1;
+		int inserted_row = -1;
+
 		do
 		{
 			printf("\n%s (%c) seleziona una colonna da 1 a 7: ", players[player_index].name, players[player_index].symbol);
-			scanf("%d", &selected_column);
-			selected_column--;
+			while (scanf("%d", &selected_column) != 1)
+			{
+				printf("Puoi inserire solo valori numerici: ");
+				scanf("%*s");
+			}
+			selected_column--; // Because of the array index from 0 to 6
 
-		} while (is_insert_valid(board_game, selected_column) == false);
-
-		inserted_row = insert_symbol(&board_game, players[player_index].symbol, selected_column);
+			inserted_row = insert_symbol(&board_game, players[player_index].symbol, selected_column);
+		} while (inserted_row == -1);
 
 		int position_array[2] = {inserted_row, selected_column};
 		if (check_winner(board_game, position_array))
 		{
-			system("cls");
 			print_board(board_game);
 			printf("\nComplimenti %s, hai vinto", players[player_index].name);
 			break;
@@ -179,6 +170,7 @@ int main()
 
 		if (check_parity(board_game))
 		{
+			print_board(board_game);
 			printf("\nOhoh, sembra che il gioco sia finito in pareggio...");
 			break;
 		}
