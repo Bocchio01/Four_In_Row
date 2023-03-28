@@ -1,97 +1,158 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <time.h>
-#include <math.h>
-int main() {
- int  x[42],a,z,i=-7,c,k,q;
- char g11[20],g22[20];
- 
- for (z=0;z<43;z++)
- 	x[z]=46;
- printf ("Ecco un programma per giocare al gioco: 'Forza 4' ");
- printf ("\nQuesta e' la tabella dove vi sfiderete te e il tuo avversaio\n");
- for (a=0;a<6;a++) { 
- 	i=i+7;
-  	for (z=0;z<7;z++)
-		printf (" %c " , x[z+i]);
-	printf ("\n"); }
- printf (" -------------------");
- printf ("\n 1  2  3  4  5  6  7");
- 
+#include <stdbool.h>
 
- printf ("\nOra puoi inserire il nome di g1:  ");								
- scanf ("%s" , &g11);
- printf ("Il giocatore %s utilizzera': x",g11);
- printf ("\nOra puoi inserire il nome di g2:  ");															
- scanf ("%s" , &g22);
- printf ("Il giocatore %s utilizzera': o",g22);
- 
- printf ("\nEd ora incominciamo a giocare");						
- printf ("\nScegliamo chi inizia: tiriamo un dado...");	
- srand (time(NULL));		
- q=rand()%2;
- if (q==1) printf ("\nInizia %s",g11);
- else printf ("\nInizia %s",g22);
- k=q;
+#define ROWS 6
+#define COLUMNS 7
+#define PLAYER_NUMBER 2
 
-do {
- if (k%2==1) printf ("\nE' il  tuo turno %s X" , g11);
- else printf ("\nE' il tuo turno %s O" , g22);
- do {
-  printf ("\nSeleziona una colonna da 1 a 7:");
-  scanf ("%d" , &c);
-  while ((c<1)||(c>7)) {
-   printf ("\nReinserisci la colonna tra 1 e 7:");
-   scanf ("%d" , &c); }
- if (x[c-1]!=46) {
-  printf ("\nLa tua colonna e' gia piena");
-  printf ("\nReinserisci la colonna scegliendo non una gia piena:");
-  a=0;}
- else a=1; 
- } while (a==0);
- if (c==1) c=36;
- if (c==2) c=37;
- if (c==3) c=38;
- if (c==4) c=39;
- if (c==5) c=40;
- if (c==6) c=41;
- if (c==7) c=42;
+void print_board(int board_game[ROWS][COLUMNS])
+{
+	for (int r = ROWS - 1; r >= 0; r--)
+	{
+		printf("\n");
+		for (int c = 0; c < COLUMNS; c++)
+		{
+			printf(" %c ", board_game[r][c]);
+		}
+	}
+	printf("\n -------------------");
+	printf("\n 1  2  3  4  5  6  7");
+}
 
-for (c;c>0;c=c-7) {
-	if (x[c-1]==46) {
-		if (k%2==1)	x[c-1]=("%c" , 120);
-  		else		x[c-1]=("%c" , 111);
-   		c=0;}}
-i=-7;
-for (a=0;a<6;a++) { 
- 	i=i+7;
-  	for (z=0;z<7;z++)
-		printf (" %c " , x[z+i]);
-	printf ("\n"); }
- printf (" -------------------");
- printf ("\n 1  2  3  4  5  6  7");
-k++;
+bool is_insert_valid(int board_game[ROWS][COLUMNS], int selected_column)
+{
+	if ((selected_column < 0) || (selected_column > COLUMNS - 1))
+	{
+		printf("\nNumero colonna non valido");
+		return false;
+	}
 
-//Controlli vincita
-for(i=0;i<21;i++)
-  	if((x[i]==x[i+7])&&(x[i]==x[i+14])&&(x[i]==x[i+21])&&(x[i]>46))	z=0;
- 	
-for(i=0;i<39;i++)
- 	if((x[i]==x[i+1])&&(x[i]==x[i+2])&&(x[i]==x[i+3])&&(x[i]>46))	z=0; 
+	if (board_game[ROWS - 1][selected_column] != 46)
+	{
+		printf("\nLa colonna selezionata e' gia' piena");
+		return false;
+	}
 
-for (c=0;c<15;c+=7)
-	for(i=0;i<3;i++)
- 	 	if((x[i+c]==x[i+c+8])&&(x[i+c]==x[i+c+16])&&(x[i+c]==x[i+c+24])&&(x[i+c]>46))	z=0; 
+	printf("\nColonna selezionata valida");
+	return true;
+}
 
-for (c=0;c<15;c+=7)
-	for(i=3;i>0;i--)
- 	 	if((x[i+c]==x[i+c+6])&&(x[i+c]==x[i+c+12])&&(x[i+c]==x[i+c+18])&&(x[i+c]>46))	z=0; 
+int insert_symbol(int (*board_game)[ROWS][COLUMNS], int symbol, int selected_column)
+{
+	int r = 0;
+	while ((*board_game)[r][selected_column] != 46)
+		r++;
+	(*board_game)[r][selected_column] = symbol;
 
-if (z==0){
-	if (k%2==0) printf ("\nComplimenti %s, hai vinto" , g11);
-	else printf ("\nComplimenti %s, hai vinto" , g22);}
-} while (z!=0);
- 
- printf ("\n\n");
- system ("PAUSE");
- return 0;
+	return r;
+}
+
+bool check_winner(int board_game[ROWS][COLUMNS], int position_array[2])
+{
+
+	int symbol = board_game[position_array[0]][position_array[1]];
+
+	for (int i = 0; i < 9; i++)
+	{
+		if (i != 4)
+		{
+			int count = 0;
+			int r = position_array[0];
+			int c = position_array[1];
+			while ((r >= 0) && (r < ROWS) && (c >= 0) && (c < COLUMNS) && (board_game[r][c] == symbol))
+			{
+				count++;
+				r += i / 3 - 1;
+				c += i % 3 - 1;
+			}
+			if (count >= 4)
+				return true;
+		}
+	}
+
+	return false;
+}
+
+int main()
+{
+
+	// Dichiarazione variabili
+
+	int board_game[ROWS][COLUMNS], player_index;
+
+	struct players
+	{
+		char name[20];
+		int symbol;
+	} players[PLAYER_NUMBER];
+
+	enum symbol
+	{
+		CROSS = 120,
+		CIRCLE = 111
+	};
+
+	for (int r = 0; r < ROWS; r++)
+		for (int c = 0; c < COLUMNS; c++)
+			board_game[r][c] = 46;
+
+	players[0].symbol = CROSS;
+	players[1].symbol = CIRCLE;
+
+	// Inizio programma
+
+	printf("Ecco un programma per giocare al gioco: 'Forza 4' ");
+	printf("\nQuesta e' la tabella dove vi sfiderete te e il tuo avversaio\n");
+	print_board(board_game);
+
+	for (int i = 0; i < PLAYER_NUMBER; i++)
+	{
+		printf("\nInserisci il nome del giocatore %d: ", i + 1);
+		scanf("%s", players[i].name);
+		printf("Il giocatore %s utilizzera': %c", players[i].name, players[i].symbol);
+	}
+
+	printf("\nEd ora incominciamo a giocare");
+	printf("\nScegliamo chi inizia: tiriamo un dado...");
+
+	srand(time(NULL));
+	player_index = rand() % 2;
+	printf("\nInizia %s", players[player_index].name);
+
+	// Inizio gioco
+
+	do
+	{
+		int selected_column = -1;
+		int inserted_row;
+		printf("\nE' il  tuo turno %s (%c)", players[player_index].name, players[player_index].symbol);
+		do
+		{
+			printf("\nSeleziona una colonna da 1 a 7:");
+			scanf("%d", &selected_column);
+			selected_column--;
+
+		} while (is_insert_valid(board_game, selected_column) == false);
+
+		inserted_row = insert_symbol(&board_game, players[player_index].symbol, selected_column);
+		print_board(board_game);
+
+		int position_array[2] = {inserted_row, selected_column};
+		if (check_winner(board_game, position_array))
+		{
+			printf("\nComplimenti %s, hai vinto", players[player_index].name);
+			break;
+		}
+		else
+		{
+			player_index = (player_index + 1) % 2;
+		}
+
+	} while (true);
+
+	printf("\n\n");
+	// system("PAUSE");
+	return 0;
 }
