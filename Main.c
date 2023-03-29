@@ -25,15 +25,36 @@
 #define COLUMNS 7
 #define PLAYER_NUMBER 2
 
+#define ANSI_COLOR_RED "\x1b[31m"
+#define ANSI_COLOR_YELLOW "\x1b[33m"
+// #define ANSI_COLOR_BLUE "\x1b[34m"
+#define ANSI_COLOR_RESET "\x1b[0m"
+
+#define RED(X) ANSI_COLOR_RED X ANSI_COLOR_RESET
+#define YELLOW(X) ANSI_COLOR_YELLOW X ANSI_COLOR_RESET
+
 void draw_board(int board[ROWS][COLUMNS])
 {
-	system("cls");
+	system("@cls || clear");
 
 	for (int r = ROWS - 1; r >= 0; r--)
 	{
 		for (int c = 0; c < COLUMNS; c++)
 		{
-			printf(" %c ", board[r][c]);
+			switch (board[r][c])
+			{
+			case 120:
+				printf(" " RED("%c") " ", board[r][c]);
+				break;
+
+			case 111:
+				printf(" " YELLOW("%c") " ", board[r][c]);
+				break;
+
+			default:
+				printf(" %c ", board[r][c]);
+				break;
+			}
 		}
 		printf("\n");
 	}
@@ -176,14 +197,14 @@ int main(int argc, char *argv[])
 	}
 
 	// Game loop
-	do
+	while (true)
 	{
 
 		draw_board(board);
 		int selected_column = -1;
 		int inserted_row = -1;
 
-		do
+		while (inserted_row == -1)
 		{
 			printf("\n%s (%c) selects any column from 1 to 7: ", players[player_index].name, players[player_index].symbol);
 			while (scanf("%d", &selected_column) != 1)
@@ -194,7 +215,7 @@ int main(int argc, char *argv[])
 			selected_column--; // Because of the array index from 0 to 6
 
 			inserted_row = insert_into_board(&board, players[player_index].symbol, selected_column);
-		} while (inserted_row == -1);
+		};
 
 		int position_array[2] = {inserted_row, selected_column};
 		if (check_winner(board, position_array))
@@ -212,8 +233,7 @@ int main(int argc, char *argv[])
 		}
 
 		player_index = (player_index + 1) % 2;
-
-	} while (true);
+	};
 
 	printf("\n\n");
 	system("PAUSE");
