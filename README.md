@@ -30,7 +30,7 @@ gcc utils.c Main.c -o Four_In_Row.exe -std=c99
 To run the game, simply run the following command:
 
 ```shell
-./Main
+./Four_In_Row
 ```
 
 ## Improvements / pull requests
