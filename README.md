@@ -1,4 +1,4 @@
-# Four_In_Row
+# Connect_4_Game
 
 This is a **simple implementation of the Four In a Row game, developed during high school using basic concepts of C**.
 
@@ -22,7 +22,7 @@ To compile the game, you need to have the GCC compiler installed on your machine
 To compile the game, simply run the following command:
 
 ```shell
-gcc utils.c Main.c -o Four_In_Row.exe -std=c99
+gcc utils.c Main.c -o Connect_4_Game.exe -std=c99
 ```
 
 ## How to run
@@ -30,7 +30,7 @@ gcc utils.c Main.c -o Four_In_Row.exe -std=c99
 To run the game, simply run the following command:
 
 ```shell
-./Four_In_Row
+./Connect_4_Game
 ```
 
 ## Improvements / pull requests
