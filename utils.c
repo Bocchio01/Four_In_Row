@@ -1,5 +1,5 @@
 /*
- * A simple 'Four in a Row' game implementation.
+ * A simple 'Connect 4 Game' game implementation.
  *
  * Author: Tommaso Bocchietti
  * Email: tommaso.bocchietti@gmail.com

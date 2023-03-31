@@ -1,6 +1,6 @@
 # Connect_4_Game
 
-This is a **simple implementation of the Four In a Row game, developed during high school using basic concepts of C**.
+This is a **simple implementation of the Connect 4 Game game, developed during high school using basic concepts of C**.
 
 ![Initial board screenshot](Img/Initial_Screen.png)
 ![Winning board screenshot](Img/Winning_Screen.png)
