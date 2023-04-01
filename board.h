@@ -1,11 +1,9 @@
 /*
- * A simple 'Connect 4 Game' game implementation.
- *
  * Author: Tommaso Bocchietti
  * Email: tommaso.bocchietti@gmail.com
- * Date: 2023-03-29
+ * Date: 2023-04-01
  *
- * Utils functions used into the main program.
+ * This file is part of the 'Connect 4 Game' project.
  *
  * License: MIT
  *
@@ -17,14 +15,14 @@
 #ifndef BOARD_H
 #define BOARD_H
 
-void draw_board(struct board board);
+void draw_board(struct Board board);
 
-bool is_insert_valid(struct board board, int selected_column);
+bool is_insert_valid(struct Board board, int selected_column);
 
-int insert_into_board(struct board *board, int symbol, int selected_column);
+int insert_into_board(struct Board *board, int symbol, int selected_column);
 
-bool check_winner(struct board board, struct current_move current_move);
+bool check_winner(struct Board board, struct BoardCoordinates current_move);
 
-bool check_tie(struct board board);
+bool check_tie(struct Board board);
 
 #endif

@@ -1,11 +1,9 @@
 /*
- * A simple 'Connect 4 Game' game implementation.
- *
  * Author: Tommaso Bocchietti
  * Email: tommaso.bocchietti@gmail.com
- * Date: 2023-03-29
+ * Date: 2023-04-01
  *
- * Utils functions used into the main program.
+ * This file is part of the 'Connect 4 Game' project.
  *
  * License: MIT
  *

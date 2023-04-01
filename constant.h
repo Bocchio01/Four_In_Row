@@ -1,42 +1,49 @@
 /*
- * This file declares the constants used in the program.
- * The constants are declared as extern so that they can be used in other files.
- * The constants are defined in the file constant.c
+ * Author: Tommaso Bocchietti
+ * Email: tommaso.bocchietti@gmail.com
+ * Date: 2023-04-01
+ *
+ * This file is part of the 'Connect 4 Game' project.
+ * It contains the constants used in the game.
+ *
+ * License: MIT
+ *
  */
 
-#ifndef CONSTANT_H
-#define CONSTANT_H
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
 
-#define MAX_N_PLAYER 10
-#define MAX_N_ROW 15
-#define MAX_N_COL 15
+#define MAX_PLAYERS 10
+#define MAX_ROWS 15
+#define MAX_COLUMNS 15
+#define MAX_WIN_SYMBOLS 10
 #define EMPTY_CELL -1
 
 #define PRINT_COLOURED(c, f, s) printf("\033[%dm" f "\033[0m", c, s)
 
-struct board
+struct Board
 {
-    int n_row;
-    int n_col;
-    int n_win_symbol;
-    int board[MAX_N_ROW][MAX_N_COL];
-    int symbols[MAX_N_PLAYER];
-    int colors[MAX_N_PLAYER];
+    int numRows;
+    int numCols;
+    int numWinSymbols;
+    int cells[MAX_ROWS][MAX_COLUMNS];
+    int playerSymbols[MAX_PLAYERS];
+    int playerColors[MAX_PLAYERS];
 };
 
-struct current_move
+struct BoardCoordinates
 {
     int row;
-    int col;
+    int column;
 };
 
-struct game
+struct Game
 {
-    int n_player;
-    int player_index;
-    struct board board;
-    char player_name[MAX_N_PLAYER][20];
-    struct current_move current_move;
+    int numPlayers;
+    int currentPlayerIndex;
+    struct Board gameBoard;
+    char playerName[MAX_PLAYERS][20];
+    struct BoardCoordinates currentMove;
 };
 
 #endif
