@@ -2,8 +2,8 @@
 
 This is **a (not so basic) 'Connect 4 Game' implementation**, developed during high school using basic concepts of C and then improved during my free time.
 
-![Initial board screenshot](Img/Initial_Screen.png)
-![Winning board screenshot](Img/Winning_Screen.png)
+![Initial board screenshot](.img/Initial_Screen.png)
+![Winning board screenshot](.img/Winning_Screen.png)
 
 ## How to play
 

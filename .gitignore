@@ -1,4 +1,9 @@
 **/_*
+build
+
+#doxygen
+html
+latex
 
 # Prerequisites
 *.d

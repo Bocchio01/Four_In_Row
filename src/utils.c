@@ -4,16 +4,17 @@
  * Date: 2023-04-01
  *
  * This file is part of the 'Connect 4 Game' project.
- * It contains some utils functions used in the game.
+ * It contains some utils functions used in the game->
  *
  * License: MIT
  *
  */
 
-#include "utils.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+
+#include "utils.h"
 
 void delay(int milliseconds)
 {

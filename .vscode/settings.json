@@ -1,9 +1,13 @@
 {
-    "files.associations": {
-        "stdbool.h": "c",
-        "getopt.h": "c",
-        "string.h": "c",
-        "board.h": "c",
-        "utils.h": "c"
-    }
+    "cmake.debugConfig": {
+        "cwd": "${workspaceFolder}",
+        "args": [
+            // "-h",
+            "-b 5x8",
+            // "-p 3",
+            // "-w 5",
+        ],
+        "console": "integratedTerminal",
+    },
+    "cmake.revealLog": "never",
 }

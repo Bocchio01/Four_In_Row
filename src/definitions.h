@@ -1,19 +1,7 @@
-/*
- * Author: Tommaso Bocchietti
- * Email: tommaso.bocchietti@gmail.com
- * Date: 2023-04-01
- *
- * This file is part of the 'Connect 4 Game' project.
- * It contains the constants used in the game.
- *
- * License: MIT
- *
- */
+#ifndef DEFINITIONS_H
+#define DEFINITIONS_H
 
-#ifndef CONSTANTS_H
-#define CONSTANTS_H
-
-#define MAX_PLAYERS 10
+#define MAX_PLAYERS 6
 #define MAX_ROWS 15
 #define MAX_COLUMNS 15
 #define MAX_WIN_SYMBOLS 10
@@ -21,7 +9,7 @@
 
 #define PRINT_COLOURED(c, f, s) printf("\033[%dm" f "\033[0m", c, s)
 
-struct Board
+typedef struct Board
 {
     int numRows;
     int numCols;
@@ -29,21 +17,21 @@ struct Board
     int cells[MAX_ROWS][MAX_COLUMNS];
     int playerSymbols[MAX_PLAYERS];
     int playerColors[MAX_PLAYERS];
-};
+} board_t;
 
-struct BoardCoordinates
+typedef struct Board_Index
 {
     int row;
     int column;
-};
+} board_index_t;
 
-struct Game
+typedef struct Game
 {
     int numPlayers;
     int currentPlayerIndex;
-    struct Board gameBoard;
+    board_t *gameBoard;
     char playerName[MAX_PLAYERS][20];
-    struct BoardCoordinates currentMove;
-};
+    board_index_t *currentMove;
+} game_t;
 
 #endif

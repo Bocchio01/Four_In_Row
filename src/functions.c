@@ -13,50 +13,50 @@
  *
  */
 
-#include "utils.h"
-#include "board.h"
-#include "constant.h"
-#include "board.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <stdbool.h>
 #include <string.h>
 
-void draw_board(struct Board board)
+#include "utils.h"
+#include "functions.h"
+#include "definitions.h"
+
+void draw_board(board_t *board)
 {
     system("@cls || clear");
 
-    for (int r = board.numRows - 1; r >= 0; r--)
+    for (int r = board->numRows - 1; r >= 0; r--)
     {
-        for (int c = 0; c < board.numCols; c++)
+        for (int c = 0; c < board->numCols; c++)
         {
-            if (board.cells[r][c] >= 0)
-                PRINT_COLOURED(board.playerColors[board.cells[r][c]], " %c ", board.playerSymbols[board.cells[r][c]]);
+            if (board->cells[r][c] >= 0)
+                PRINT_COLOURED(board->playerColors[board->cells[r][c]], " %c ", board->playerSymbols[board->cells[r][c]]);
             else
                 printf(" . ");
         }
         printf("\n");
     }
 
-    for (int i = 0; i < board.numCols; i++)
+    for (int i = 0; i < board->numCols; i++)
         printf("---");
     printf("\n");
 
-    for (int i = 0; i < board.numCols; i++)
+    for (int i = 0; i < board->numCols; i++)
         i + 1 > 9 ? printf(" %d", i + 1) : printf(" %d ", i + 1);
     printf("\n");
 }
 
-bool is_insert_valid(struct Board board, int selected_column)
+bool is_insert_valid(board_t *board, int selected_column)
 {
-    if ((selected_column < 0) || (selected_column > board.numCols - 1))
+    if ((selected_column < 0) || (selected_column > board->numCols - 1))
     {
         printf("\nColumn's index out of range");
         return false;
     }
 
-    if (board.cells[board.numRows - 1][selected_column] != EMPTY_CELL)
+    if (board->cells[board->numRows - 1][selected_column] != EMPTY_CELL)
     {
         printf("\nThe selected column is full");
         return false;
@@ -65,10 +65,10 @@ bool is_insert_valid(struct Board board, int selected_column)
     return true;
 }
 
-int insert_into_board(struct Board *board, int symbol, int selected_column)
+int insert_into_board(board_t *board, int symbol, int selected_column)
 {
 
-    if (!is_insert_valid(*board, selected_column))
+    if (!is_insert_valid(board, selected_column))
         return -1;
 
     int r = 0;
@@ -79,10 +79,10 @@ int insert_into_board(struct Board *board, int symbol, int selected_column)
     return r;
 }
 
-bool check_winner(struct Board board, struct BoardCoordinates current_move)
+bool check_winner(board_t *board, board_index_t *current_move)
 {
 
-    int symbol = board.cells[current_move.row][current_move.column];
+    int symbol = board->cells[current_move->row][current_move->column];
 
     for (int i = 0; i <= 3; i++)
     {
@@ -90,10 +90,10 @@ bool check_winner(struct Board board, struct BoardCoordinates current_move)
 
         for (int dir = -1; dir <= 1; dir += 2)
         {
-            int r = current_move.row;
-            int c = current_move.column;
+            int r = current_move->row;
+            int c = current_move->column;
 
-            while ((r >= 0) && (r < board.numRows) && (c >= 0) && (c < board.numCols) && (board.cells[r][c] == symbol))
+            while ((r >= 0) && (r < board->numRows) && (c >= 0) && (c < board->numCols) && (board->cells[r][c] == symbol))
             {
                 count++;
                 r += dir * (i / 3 - 1);
@@ -101,17 +101,17 @@ bool check_winner(struct Board board, struct BoardCoordinates current_move)
             }
         }
 
-        if (--count >= board.numWinSymbols) // Because the central symbol is counted twice
+        if (--count >= board->numWinSymbols) // Because the central symbol is counted twice
             return true;
     }
 
     return false;
 }
 
-bool check_tie(struct Board board)
+bool check_tie(board_t *board)
 {
-    for (int c = 0; c < board.numCols; c++)
-        if (board.cells[board.numRows - 1][c] == EMPTY_CELL)
+    for (int c = 0; c < board->numCols; c++)
+        if (board->cells[board->numRows - 1][c] == EMPTY_CELL)
             return false;
 
     return true;
