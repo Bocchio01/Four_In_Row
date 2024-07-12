@@ -10,4 +10,8 @@
         "console": "integratedTerminal",
     },
     "cmake.revealLog": "never",
+    "files.associations": {
+        "glfw3.h": "c",
+        "glad.h": "c"
+    },
 }

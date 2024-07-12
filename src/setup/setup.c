@@ -45,7 +45,7 @@ void C4G_Setup_Prompting(game_t *game)
     for (int i = 0; i < game->numPlayers; i++)
     {
         printf("\nEnter the name of player %d: ", i + 1);
-        scanf("%s", &game->playerName[i]);
+        // scanf("%s", &game->playerName[i]);
         printf("Player %s is going to use: ", game->playerName[i]);
         PRINT_COLOURED(game->gameBoard->playerColors[i], "%c\n", game->gameBoard->playerSymbols[i]);
     }
